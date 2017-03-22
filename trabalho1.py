@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-import numpy as np
-
 """
 
 Alunos: 
@@ -13,6 +9,12 @@ Gabriel dos Santos Vieira -114029198
 Victor Garritano Noronha - 114023388
 
 """
+
+
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+
 def generate_linear_data(w,b,n):
     dim = len(w)
     y = []
@@ -108,16 +110,12 @@ class Perceptron:
         y = [-1.0 if sample < 0.0 else 1.0 for sample in y]
         return y
         #predict deve retornar as classes para X
-
-
-
-
 data = generate_linear_data(np.array([1,2,3]), 0, 1000)
 net = Perceptron(10e-5, 0.5)
 net.fit(data[0], data[1])
-# test_data = generate_linear_data(np.array([1,2,3]), 0, 200)
-# y_hat = net.predict(test_data[0])
-# print (np.mean(np.equal(y_hat, test_data[1])))
+test_data = generate_linear_data(np.array([1,2,3]), 0, 200)
+y_hat = net.predict(test_data[0])
+print ('Test accuracy: ' + str(np.mean(np.equal(y_hat, test_data[1]))))
 print ('w: ' + str(net.w))
 print ('b: '+ str(net.b))
 plot_points_and_plane(net, data[0], data[1])
