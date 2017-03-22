@@ -5,6 +5,14 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
+"""
+
+Alunos: 
+Mateus Ildefonso do Nascimento - 114073032
+Gabriel dos Santos Vieira -114029198
+Victor Garritano Noronha - 114023388
+
+"""
 def generate_linear_data(w,b,n):
     dim = len(w)
     y = []
