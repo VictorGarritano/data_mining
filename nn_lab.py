@@ -19,7 +19,7 @@ class RedeNeural:
         Ws = list()
         previousSize = inputSize
         for currentSize in self.hidden_nodes:
-            Ws.append(np.random.uniform(size=(previousSize,currentSize)))
+            Ws.append(np.random.normal(size=(previousSize,currentSize)))
             previousSize = currentSize
         Ws.append(np.random.uniform(size=(previousSize,outputSize)))
         return Ws    
@@ -38,7 +38,9 @@ class RedeNeural:
         while epoch < self.numrounds:
             #feed forward
             h = X
-            hs = list(X)
+            hs = list()
+            hs.append(X)
+            
             for w in self.Ws:
                 y_ball = h.dot(w)
                 y_hat = self.sigmoid(y_ball)
@@ -48,18 +50,20 @@ class RedeNeural:
             loss = np.mean(np.square(h - y))
             desire = y
             deltas = list()
-
+            
             for i in xrange(1,len(hs)):
                 error = desire - hs[-i]
                 deltas.append(error*self.sigmoid_prime(hs[-i]))
                 desire = deltas[-1].dot(self.Ws[-i].T)
 
                 #Atualiza
-                self.Ws[-i] += hs[-i-1].T.dot(deltas[-1])*self.eta/samples
+                self.Ws[-i] += hs[-i-1].T.dot(deltas[-1])*(self.eta*1.0/samples)
 
-            if epoch%(self.numrounds/5) == 0:
+            if epoch%1000 == 0:
                 print('epoch: {}    loss: {}'.format(str(epoch), str(loss)))
 
+            epoch += 1
+        print hs[-1]
         #fit não deve possuir retorno.
         '''
         o fit deve descobrir a dimensão do problema
@@ -86,5 +90,5 @@ y = np.array([[0],
              [1],
              [0]])
 
-RN = RedeNeural(1,60000,[4])
+RN = RedeNeural(10,60000,[4])
 RN.fit(X,y)
