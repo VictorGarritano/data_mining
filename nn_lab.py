@@ -15,6 +15,9 @@ class RedeNeural:
         '''
         Quantidade de nós no hidden layer
         '''
+
+    #Inicializa os vetores com a gaussian mean zero, esta distribuição
+    #garante uma melhor convergência
     def generateWeights(self, inputSize, outputSize):
         Ws = list()
         previousSize = inputSize
@@ -47,28 +50,21 @@ class RedeNeural:
                 h = y_hat
                 hs.append(y_hat)
             #backward pass            
-            loss = np.mean(np.square(h - y))
-            desire = y
+            loss = np.mean(0.5*np.square(y-y_hat))
             deltas = list()
             
+            error = -(y - y_hat)
             for i in xrange(1,len(hs)):
-                error = desire - hs[-i]
                 deltas.append(error*self.sigmoid_prime(hs[-i]))
-                desire = deltas[-1].dot(self.Ws[-i].T)
-
+                error = deltas[-1].dot(self.Ws[-i].T)
                 #Atualiza
-                self.Ws[-i] += hs[-i-1].T.dot(deltas[-1])*(self.eta*1.0/samples)
+                self.Ws[-i] -= hs[-i-1].T.dot(deltas[-1])*(self.eta*1.0)
 
             if epoch%1000 == 0:
                 print('epoch: {}    loss: {}'.format(str(epoch), str(loss)))
 
             epoch += 1
         print hs[-1]
-        #fit não deve possuir retorno.
-        '''
-        o fit deve descobrir a dimensão do problema
-        e o número de classes.
-        '''
         
     def predict(self, X):
         pass
@@ -76,10 +72,10 @@ class RedeNeural:
 
 
 #input data
-X = np.array([[0,0,1],  # Note: there is a typo on this line in the video
-            [0,1,1],
-            [1,0,1],
-            [1,1,1]])
+X = np.array([[0,0],  # Note: there is a typo on this line in the video
+            [0,1],
+            [1,0],
+            [1,1]])
 
 
 # The output of the exclusive OR function follows. 
@@ -90,5 +86,5 @@ y = np.array([[0],
              [1],
              [0]])
 
-RN = RedeNeural(10,60000,[4])
+RN = RedeNeural(1,60000,[4])
 RN.fit(X,y)

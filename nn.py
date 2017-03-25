@@ -9,7 +9,7 @@ def sigmoid(x):
 	return 1.0 / (1.0 + np.exp(-x))
 
 def sigmoid_prime(x):
-	return sigmoid(x)*(1.0 - sigmoid(x))
+	return x*(1.0 - x)
 
 for epoch in range(60000):
 	h = x.dot(w1)
@@ -22,10 +22,10 @@ for epoch in range(60000):
 		print ('epoch: {}	loss: {}'.format(str(epoch), str(loss)))
 
 	l2_loss = -(y - y_hat)
-	l2_delta = l2_loss * sigmoid_prime(y_ball)
+	l2_delta = l2_loss * sigmoid_prime(y_hat)
 	grad_w2 = h_activated.T.dot(l2_delta)
 	l1_error = l2_delta.dot(w2.T)
-	l1_delta = l1_error * sigmoid_prime(h)
+	l1_delta = l1_error * sigmoid_prime(h_activated)
 	grad_w1 = x.T.dot(l1_delta)
 
 	w1 -= grad_w1
